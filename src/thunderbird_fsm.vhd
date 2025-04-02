@@ -149,5 +149,13 @@ begin
     o_lights_R(0) <= (f_s(2) and f_s(1) and f_s(0)) or 
                      (not(f_s(2)) and f_s(1) and f_s(0));                                   
 	-----------------------------------------------------					   
-				  
+	register_proc : process (i_clk, i_reset)
+begin
+    if i_reset = '1' then
+        f_s <= "000";        -- reset state is off
+    elsif (rising_edge(i_clk)) then
+        f_s <= f_s_next;    -- next state becomes current state
+    end if;
+end process register_proc;
+			  
 end thunderbird_fsm_arch;
