@@ -64,15 +64,31 @@ architecture test_bench of thunderbird_fsm_tb is
        o_lights_R      : out   std_logic_vector(2 downto 0)
 	  );
 	end component thunderbird_fsm;
-
+    
+    signal w_left : std_logic := '0';
+    signal w_right : std_logic := '0';
+	signal w_reset : std_logic := '0';
+	signal w_clk : std_logic := '0';
+	
+	signal w_left_light : std_logic_vector (2 downto 0) := "000";
+	signal w_right_light : std_logic_vector (2 downto 0) := "000";
+	
 	-- test I/O signals
 	
 	-- constants
 	
+	constant k_clk_period : time := 10 ns;
 	
 begin
 	-- PORT MAPS ----------------------------------------
-	
+	uut: thunderbird_fsm port map (
+          i_clk => w_clk,
+          i_reset => w_reset,
+          i_left => w_left,
+          i_right => w_right,
+          o_lights_L => w_left_light,
+          o_lights_R => w_right_light       
+        );
 	-----------------------------------------------------
 	
 	-- PROCESSES ----------------------------------------	
@@ -87,7 +103,51 @@ begin
 	-----------------------------------------------------
 	
 	-- Test Plan Process --------------------------------
-	
+	sim_proc: process
+	begin
+		-- sequential timing		
+		w_reset <= '1';
+		wait for k_clk_period*1;
+		assert w_left_light and w_right_light = "000" report "bad reset" severity failure;
+		 
+		w_reset <= '0';
+		wait for k_clk_period*1;
+		
+		w_left <= '1'; wait for k_clk_period;
+           assert w_left_light = "001" report "should be one light on left blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_left_light = "011" report "should be two lights on left blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_left_light = "111" report "should be three lights on left blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_left_light = "000" report "no lights should be on" severity failure;
+          
+        w_reset <= '1';
+		wait for k_clk_period*1;
+		w_reset <= '0';
+		 
+		w_right <= '1'; wait for k_clk_period;
+           assert w_right_light = "001" report "should be one light on right blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_right_light = "011" report "should be two lights on right blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_right_light = "111" report "should be three lights on right blinker on" severity failure;
+        wait for k_clk_period;
+          assert w_right_light = "000" report "no lights should be on" severity failure;
+          
+        w_reset <= '1';
+		wait for k_clk_period*1;
+		w_reset <= '0';
+		
+		 
+        w_right <= '1'; w_left <= '1'; wait for k_clk_period;
+            assert w_right_light and w_left_light = "111" report "lights should be blinking for hazards" severity failure;
+        wait for k_clk_period;
+             assert w_right_light and w_left_light = "000" report "lights should be blinking for hazards" severity failure; 
+             
+        wait;
+      end process;
+          
 	-----------------------------------------------------	
 	
 end test_bench;
