@@ -132,7 +132,7 @@ begin
 	
 	-- ground unused LEDs
 	-- leave unused switches UNCONNECTED
-	
+
 	-- Ignore the warnings associated with these signals
 	-- Alternatively, you can create a different board implementation, 
 	--   or make additional adjustments to the constraints file
