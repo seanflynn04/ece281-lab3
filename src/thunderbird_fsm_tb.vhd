@@ -57,9 +57,12 @@ end thunderbird_fsm_tb;
 architecture test_bench of thunderbird_fsm_tb is 
 	
 	component thunderbird_fsm is 
---	  port(
-		
---	  );
+	  port(
+	   i_clk, i_reset  : in    std_logic;
+       i_left, i_right : in    std_logic;
+       o_lights_L      : out   std_logic_vector(2 downto 0);
+       o_lights_R      : out   std_logic_vector(2 downto 0)
+	  );
 	end component thunderbird_fsm;
 
 	-- test I/O signals
@@ -74,7 +77,13 @@ begin
 	
 	-- PROCESSES ----------------------------------------	
     -- Clock process ------------------------------------
-    
+    clk_proc : process
+	begin
+		w_clk <= '0';
+        wait for k_clk_period/2;
+		w_clk <= '1';
+		wait for k_clk_period/2;
+	end process;
 	-----------------------------------------------------
 	
 	-- Test Plan Process --------------------------------

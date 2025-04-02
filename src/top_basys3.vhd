@@ -118,10 +118,16 @@ begin
         o_lights_L(2) => led(15),
         o_lights_R(0) => led(2),
         o_lights_R(1) => led(1),
-        o_lights_R(2) => led(0),
-        
-	
-	
+        o_lights_R(2) => led(0)
+       ); 
+       
+       clkdiv_inst : clock_divider 		--instantiation of clock_divider to take 
+        generic map ( k_DIV => 25000000 ) -- 1 Hz clock from 100 MHz
+        port map (						  
+            i_clk   => clk,
+            i_reset => btnL,
+            o_clk   => w_clk
+        );    
 	-- CONCURRENT STATEMENTS ----------------------------
 	
 	-- ground unused LEDs

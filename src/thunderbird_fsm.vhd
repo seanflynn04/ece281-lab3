@@ -105,19 +105,16 @@ begin
 	-- CONCURRENT STATEMENTS --------------------------------------------------------	
 	f_s_next(2) <= (not(f_s(2)) and not(f_s(1)) and not(f_s(0)) and i_left and not(i_right)) or
 	            (not(f_s(2)) and not(f_s(1)) and not(f_s(0)) and i_left and i_right) or
-	            (f_s(2) and f_s(1) and f_s(0)) or
 	            (f_s(2) and not(f_s(1)) and not(f_s(0))) or
 	            (f_s(2) and not(f_s(1)) and f_s(0));
 	            
 	f_s_next(1) <= (not(f_s(2)) and not(f_s(1)) and not(f_s(0)) and i_left and i_right) or 
-	               (f_s(2) and f_s(1) and f_s(0)) or 
 	               (not(f_s(2)) and not(f_s(1)) and f_s(0)) or
 	               (not(f_s(2)) and f_s(1) and not(f_s(0))) or
 	               (f_s(2) and not(f_s(1)) and f_s(0));
 	               
 	f_s_next(0) <= (not(f_s(2)) and not(f_s(1)) and not(f_s(0)) and not(i_left) and i_right) or  
 	               (not(f_s(2)) and not(f_s(1)) and not(f_s(0)) and i_left and i_right) or 
-	               (f_s(2) and f_s(1) and f_s(0)) or 
 	               (not(f_s(2)) and f_s(1) and not(f_s(0))) or 
 	               (f_s(2) and not(f_s(1)) and not(f_s(0)));           
 	               
@@ -146,7 +143,7 @@ begin
                      (not(f_s(2)) and f_s(1) and not(f_s(0))) or
                      (not(f_s(2)) and f_s(1) and f_s(0));
                      
-    o_lights_R(0) <= (f_s(2) and f_s(1) and f_s(0)) or 
+    o_lights_R(2) <= (f_s(2) and f_s(1) and f_s(0)) or 
                      (not(f_s(2)) and f_s(1) and f_s(0));                                   
 	-----------------------------------------------------					   
 	register_proc : process (i_clk, i_reset)
