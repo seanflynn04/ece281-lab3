@@ -108,7 +108,7 @@ begin
 		-- sequential timing		
 		w_reset <= '1';
 		wait for k_clk_period*1;
-		assert w_left_light and w_right_light = "000" report "bad reset" severity failure;
+		assert w_left_light = "000" and w_right_light = "000" report "bad reset" severity failure;
 		
 		 -- check if reset is correct
 		w_reset <= '0';
@@ -122,12 +122,14 @@ begin
           assert w_left_light = "111" report "should be three lights on left blinker on" severity failure;
         wait for k_clk_period;
           assert w_left_light = "000" report "no lights should be on" severity failure;
+         w_left <= '0';
           --reset the blinkers
         w_reset <= '1';
 		wait for k_clk_period*1;
 		w_reset <= '0';
+		wait for k_clk_period*1;
+		 w_right <= '1'; wait for k_clk_period*1;
 		 --check if right blinker is correctly flashing
-		w_right <= '1'; wait for k_clk_period;
            assert w_right_light = "001" report "should be one light on right blinker on" severity failure;
         wait for k_clk_period;
           assert w_right_light = "011" report "should be two lights on right blinker on" severity failure;
@@ -135,16 +137,17 @@ begin
           assert w_right_light = "111" report "should be three lights on right blinker on" severity failure;
         wait for k_clk_period;
           assert w_right_light = "000" report "no lights should be on" severity failure;
+        w_right <= '0';
           --reset the blinkers
         w_reset <= '1';
 		wait for k_clk_period*1;
 		w_reset <= '0';
-		
-		 --check if the hazards are working properly
-        --w_right <= '1'; w_left <= '1'; wait for k_clk_period;
-         --   assert w_right_light and w_left_light = "111" report "lights should be blinking for hazards" severity failure;
-        --wait for k_clk_period;
-          --   assert w_right_light and w_left_light = "000" report "lights should be blinking for hazards" severity failure; 
+		wait for k_clk_period*1;
+		 --check if the hazards are working properly and if they are blinking
+        w_right <= '1'; w_left <= '1'; wait for k_clk_period;
+           assert w_right_light = "111" and w_left_light = "111" report "lights should be blinking for hazards" severity failure;
+        wait for k_clk_period;
+            assert w_right_light = "000" and w_left_light = "000" report "lights should be blinking for hazards" severity failure; 
              
         wait;
       end process;
